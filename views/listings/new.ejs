@@ -1,32 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WanderLust</title>
-</head>
-<body>
+<% layout ("layouts/boilerplate") %>
+<div class="row mt-3">
+  <div class="col-8">
     <h3>Create New Listing</h3>
-    <form action="/listings" method="POST">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required placeholder="Enter a Title"><br><br>
+    <form action="/listings" method="POST" novalidate class="needs-validation">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input
+          type="text"
+          id="title"
+          name="listing[title]"
+          required
+          placeholder="Enter a Title"
+          class="form-control"
+        />
+        <div class="valid-feedback">Title Looks good!</div>
+        <div class="invalid-feedback">Please choose a Title.</div>
+      </div>
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required placeholder="Enter a description"></textarea><br><br>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea
+          id="description"
+          name="listing[description]"
+          required
+          placeholder="Enter a description"
+          class="form-control"
+        ></textarea>
+        <div class="valid-feedback">Description Looks good!</div>
+        <div class="invalid-feedback">Please fill the Description.</div>
+      </div>
 
-        <label for="price">Price:</label>
-        <input type="number" id="price" name="price" required placeholder="Enter Price"><br><br>
+      <div class="mb-3">
+        <label for="image" class="form-label">Image URL:</label>
+        <input
+          type="text"
+          id="image"
+          name="listing[image]"
+          placeholder="Enter Image URL"
+          class="form-control"
+        />
+      </div>
 
-        <label for="image">Image URL:</label>
-        <input type="text" id="image" name="image" placeholder="Enter Image URL"><br><br>
+      <div class="row">
+        <div class="mb-3 col-md-6">
+          <label for="price" class="form-label">Price:</label>
+          <input
+            
+            id="price"
+            name="listing[price]"
+            required
+            placeholder="1500"
+            class="form-control"
+          />
+          <div class="valid-feedback">Good!</div>
+          <div class="invalid-feedback">Please choose a Price.</div>
+        </div>
 
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" required placeholder="Enter Location"><br><br>
+        <div class="mb-3 col-md-6">
+          <label for="country" class="form-label">Country:</label>
+          <input
+            type="text"
+            id="country"
+            name="listing[country]"
+            required
+            placeholder="India"
+            class="form-control"
+          />
+          <div class="valid-feedback">Nice!</div>
+          <div class="invalid-feedback">Please provide the vailid Country.</div>
+        </div>
+      </div>
 
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" required placeholder="Enter Country"><br><br>
+      <div class="mb-3">
+        <label for="location" class="form-label">Location:</label>
+        <input
+          type="text"
+          id="location"
+          name="listing[location]"
+          required
+          placeholder="Delhi, Mumbai"
+          class="form-control"
+        />
+        <div class="valid-feedback">Nice!</div>
+        <div class="invalid-feedback">Please provide the vailid Location.</div>
+      </div>
 
-        <button type="submit">Create Listing</button>
+      <button type="submit" class="btn btn-dark add-btn mt-3">Add</button>
     </form>
-</body>
-</html>
+  </div>
+</div>
