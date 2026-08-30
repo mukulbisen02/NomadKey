@@ -1,15 +1,125 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-regular fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
+  <div class="container-fluid nav-box">
+    <!-- Logo -->
+    <div class="navbar-brand">
+      <a href="/listings" class="navbar-text">
+        <img
+          src="/asseset/NomadKey_Icon2.png"
+          alt="NomadKey Logo"
+          width="180"
+          height="50"
+        >
+      </a>
+    </div>
+    <!-- <div class="navbar-brand">
+      <a
+        href="/listings"
+        class="d-flex align-items-center text-decoration-none"
+      >
+        <img
+          src="/asseset/NomadKey_Icon3.png"
+          alt="NomadKey Logo"
+          width="40"
+          height="40"
+          class="me-2"
+        />
+        <span class="fw-bold text-danger">NomadKey</span>
+      </a>
+    </div> -->
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/">Home</a>
-        <a class="nav-link" href="/listings">All Listings</a>
-        <a class="nav-link" href="/listings/new">Add new Listing</a>
-      </div>
+
+    <!-- NAVBAR COLLAPSE -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- LEFT ITEMS -->
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/listings">&nbsp;&nbsp;Explore</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/listings/new"
+            >&nbsp;&nbsp;<i class="fa-solid fa-xs"></i>&nbsp;Add New</a
+          >
+        </li>
+      </ul>
+
+      <!-- SEARCH BAR -->
+      <form
+        class="d-flex me-md-3 mt-2 mt-md-0 nav-item searchBar"
+        role="search"
+        action="/search"
+        method="GET"
+      >
+        <input
+          class="form-control me-2 search-inp"
+          type="search"
+          name="query"
+          placeholder="Search Destinations"
+          aria-label="Search"
+        />
+        <button class="btn search-btn me-2" type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <b>Search</b>
+        </button>
+      </form>
+
+      <!-- RIGHT ITEMS -->
+      <ul class="navbar-nav mb-2 mb-md-0">
+        <li class="nav-item">
+          <button id="themeBtn" class="btn dark nav-link nav-dark">
+            &nbsp;&nbsp;Dark 🌙
+          </button>
+        </li>
+
+        <% if (!currUser) { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/signup"><b>Sign Up</b></a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/login">
+            <b>Login</b>&nbsp;
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+          </a>
+        </li>
+        <% } %>
+        <% if (currUser) { %>
+
+        <!--  USER DROPDOWN -->
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown"
+          >
+            &nbsp;&nbsp;<%= currUser.username %>
+          </a>
+
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+            <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item text-danger" href="/logout">
+                Logout&nbsp;<i class="fa-solid fa-arrow-right-from-bracket"></i>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <% } %>
+      </ul>
     </div>
   </div>
 </nav>

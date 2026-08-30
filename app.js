@@ -1,16 +1,21 @@
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
-const asyncWrap = require("./utilitys/asyncWrep.js");
 const ExpressError = require("./utilitys/ExpressError.js");
 const session = require("express-session");
+// const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const Listing = require("./models/listing.js");
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
@@ -24,7 +29,7 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 // const mongoURI = "mongodb://localhost:27017/wanderlust";
-const mongoURI = "mongodb://localhost:27017/NomadKey";
+const mongoURL = "mongodb://localhost:27017/NomadKey";
 
 main()
   .then(() => {
@@ -35,12 +40,29 @@ main()
   });
 
 async function main() {
-  await mongoose.connect(mongoURI);
+  await mongoose.connect(mongoURL);
 }
+
+
+// From Amit - start
+// const store = MongoStore.create({
+//   mongoUrl: mongoURL,
+//   crypto: {
+//     secret: process.env.SECRET,
+//   },
+//   touchAfter: 24 * 3600,
+// });
+
+// store.on("error", () => {
+//   console.log("ERROR in MONGO SESSION STORE", err);
+// });
+// end
+
 
 //Express-session
 const sessionOptions = {
-  secret: "mysuoersecretcode",
+  // store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -52,7 +74,7 @@ const sessionOptions = {
 
 //Home Route
 app.get("/", (req, res) => {
-  res.send("Hello, I'm Root!");
+  res.redirect("/listings");
 });
 
 app.use(session(sessionOptions));
@@ -68,21 +90,34 @@ passport.deserializeUser(User.deserializeUser());
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
+  res.locals.currUser = req.user;
   next();
 });
-
-// app.get("/demouser", async (req, res) => {
-//   let fakeUser = new User({
-//     email: "bisen@gmail.com",
-//     username: "mukul-bisen",
-//   });
-//   let newUser = await User.register(fakeUser, "helloworld");
-//   res.send(newUser);
-// });
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/", userRouter);
+
+
+// Search Route
+app.get("/search", async (req, res) => {
+  try {
+    const query = req.query.query;
+    const results = await Listing.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { location: { $regex: query, $options: "i" } },
+        { country: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+      ],
+    });
+    res.render("listings/index", { allListings: results });
+  } catch (err) {
+    console.log("Error in search:", err);
+    res.status(500).send("Error in search");
+  }
+});
+
 
 // Error Handling Middleware
 app.use((req, res, next) => {
